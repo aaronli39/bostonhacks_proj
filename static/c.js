@@ -14,12 +14,28 @@ window.onload = function () {
     }
 
     /**
-    * Tick numbers
+     * Tick numbers
     */
     function pad(number, length) {
         // Create an array of the remaining length + 1 and join it with 0's
         return new Array((length || 2) + 1 - String(number).length).join(0) + number;
     }
+
+    /**
+     * Easing function from https://github.com/danro/easing-js/blob/master/easing.js
+     */
+    Math.easeOutBounce = function (pos) {
+        if ((pos) < (1 / 2.75)) {
+            return (7.5625 * pos * pos);
+        }
+        if (pos < (2 / 2.75)) {
+            return (7.5625 * (pos -= (1.5 / 2.75)) * pos + 0.75);
+        }
+        if (pos < (2.5 / 2.75)) {
+            return (7.5625 * (pos -= (2.25 / 2.75)) * pos + 0.9375);
+        }
+        return (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375);
+    };
 
     // variable to store the current time
     var now = getNow();
@@ -143,24 +159,67 @@ window.onload = function () {
                     minute.update(now.minutes, true, animation);
                     second.update(now.seconds, true, animation);
                 }
-
             }, 1000);
-
         });
+};
 
-    /**
-     * Easing function from https://github.com/danro/easing-js/blob/master/easing.js
-     */
-    Math.easeOutBounce = function (pos) {
-        if ((pos) < (1 / 2.75)) {
-            return (7.5625 * pos * pos);
+
+var prev = 0;
+var events = [
+];
+
+var addEvent = function (name, start, end, first) {
+    if (first) {
+        console.log("first time");
+        var blank = { name: '', y: (end / 12) * 100, color: 'white' };
+        var event = { name: name, y: (end - start) / 12 * 100 };
+        events.push(blank);
+        events.push(event);
+        console.log(events);
+    } else {
+        var blank = { name: '', y: (end - prev) / 12 * 100, color: 'white' };
+        var event = { name: name, y: (end - start) / 12 * 100 };
+        prev = end;
+        events.push(blank);
+        events.push(event);
+    }
+
+    Highcharts.chart('container2', {
+        chart: {
+            height: 270,
+            width: 270,
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+        tooltip: {
+            pointFormat: '{series.name}: ' + events[0][1] + " - " + events[0][2]
+        },
+        plotOptions: {
+            pie: {
+                size: 240,
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: false,
+                backgroundColor: 'transparent'
+            }
+        },
+        series: [{
+            name: 'Event',
+            colorByPoint: true,
+            data: events
+        }],
+        credits: {
+            enabled: false
         }
-        if (pos < (2 / 2.75)) {
-            return (7.5625 * (pos -= (1.5 / 2.75)) * pos + 0.75);
-        }
-        if (pos < (2.5 / 2.75)) {
-            return (7.5625 * (pos -= (2.25 / 2.75)) * pos + 0.9375);
-        }
-        return (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375);
-    };
-}
+    });
+};
+
+

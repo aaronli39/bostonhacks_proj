@@ -1,5 +1,21 @@
 #container {
-    height: 400px; 
+    z-index: 10;
+}
+
+#container2 {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+#main {
+    height: 600px;
+    width: 600px;
+    position: relative;
 }
 
 .highcharts-figure, .highcharts-data-table table {

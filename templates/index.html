@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="../static/style.css"> -->
     <link rel="stylesheet" href="../static/main.css">
     <!-- <script src="../static/d3.js"></script> -->
@@ -14,14 +16,36 @@
 
 <body>
     <!-- <div class="chart"></div> -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="../static/c.js"></script>
-    <figure class="highcharts-figure">
-        <div id="container"></div>
-    </figure>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col">
+                <div id="container"></div>
+                <div id="container2"></div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col text-center">
+                <div id="addEv" class="btn btn-primary">Add event</div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+    <!-- <div id="container2"></div> -->
+    <!-- <script>
+                document.getElementById("addEv").addEventListener("click", function(e) {
+                    console.log("yoo");
+                });
+            </script> -->
 
+    <script src="../static/listeners.js"></script>
 </body>
 
 </html>
