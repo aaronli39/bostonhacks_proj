@@ -291,12 +291,10 @@ var eventTimes = [];
 var addEvent = function (name, start, end, am, am1, first) {
     var container = "";
     if (first) {
-        console.log("first time");
         var temp = start.split(":");
         start1 = parseInt(temp[0]) + (parseInt(temp[1]) / 60);
         temp = end.split(":");
         end1 = parseInt(temp[0]) + (parseInt(temp[1]) / 60);
-
         if (am != am1) {
             if (am && !am1) {
                 var amPart = 12 - start1;
@@ -496,13 +494,15 @@ var addEvent = function (name, start, end, am, am1, first) {
             start1 = parseInt(temp[0]) + (parseInt(temp[1]) / 60);
             temp = end.split(":");
             end1 = parseInt(temp[0]) + (parseInt(temp[1]) / 60);
-
+            console.log("DEBUG: " + start1 + " " + end1);
             var blank = { name: '', y: (start1 / 12) * 100, color: 'white' };
             var event = { name: name, y: (end1 - start1) / 12 * 100, start: start, end: end };
             var time = [name, start + "am", end + "am"];
+            eventTimes.push(time);
             eventsAM.push(blank);
             eventsAM.push(event);
-            eventTimes.push(time);
+            blank = { name: name, y: 100 - ((end1 - start1) / 12 * 100) - (start1 / 12 * 100), color: 'white' };
+            eventsAM.push(blank);
 
             Highcharts.chart('container2', {
                 chart: {
@@ -541,8 +541,6 @@ var addEvent = function (name, start, end, am, am1, first) {
                 }
             });
 
-            blank = { name: name, y: 100 - ((end1 - start1) / 12 * 100) - (start / 12 * 100), start: start, end: end };
-            eventsAM.push(blank);
             eventsAM = [];
         } else {
             var temp = start.split(":");
@@ -553,10 +551,12 @@ var addEvent = function (name, start, end, am, am1, first) {
             var blank = { name: '', y: (start1 / 12) * 100, color: 'white' };
             var event = { name: name, y: (end1 - start1) / 12 * 100, start: start, end: end };
             var time = [name, start + "pm", end + "pm"];
+
+            eventTimes.push(time);
             eventsPM.push(blank);
             eventsPM.push(event);
-            eventTimes.push(time);
-
+            blank = { name: name, y: 100 - ((end1 - start1) / 12 * 100) - (start1 / 12 * 100), color: 'white' };
+            eventsPM.push(blank);
             Highcharts.chart('container4', {
                 chart: {
                     height: 200,
@@ -594,48 +594,316 @@ var addEvent = function (name, start, end, am, am1, first) {
                 }
             });
 
-            blank = { name: name, y: 100 - ((end1 - start1) / 12 * 100) - (start / 12 * 100), start: start, end: end };
             eventsPM = [];
         }
     } else {
         console.log("not first");
 
-        Highcharts.chart('container2', {
-            chart: {
-                height: 200,
-                width: 200,
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '{series.name}: ' + eventTimes[0][1] + " - " + eventTimes[0][2]
-            },
-            plotOptions: {
-                pie: {
-                    size: 180,
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
+        if (am != am1) {
+            if (am && !am1) {
+                var amPart = 12 - start1;
+                var pmPart = end1;
+                var time = [name, start + "am", end + "pm"];
+                prev = end;
+                eventTimes.push(time);
+                console.log("DEBUGGG: " + eventTimes);
+
+                // AM CLOCK
+                var blank = { name: '', y: (start1 - prev) / 12 * 100, color: 'white' };
+                var event = { name: name, y: amPart / 12 * 100, start: start, end: end };
+
+                eventsAM.push(blank);
+                eventsAM.push(event);
+
+                Highcharts.chart('container2', {
+                    chart: {
+                        height: 200,
+                        width: 200,
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
                     },
-                    showInLegend: false,
-                    backgroundColor: 'transparent'
-                }
-            },
-            series: [{
-                name: 'Event',
-                colorByPoint: true,
-                data: events
-            }],
-            credits: {
-                enabled: false
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: ' + eventTimes[0][1] + " - " + eventTimes[0][2]
+                    },
+                    plotOptions: {
+                        pie: {
+                            size: 180,
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: false,
+                            backgroundColor: 'transparent'
+                        }
+                    },
+                    series: [{
+                        name: 'Event',
+                        colorByPoint: true,
+                        data: eventsAM
+                    }],
+                    credits: {
+                        enabled: false
+                    }
+                });
+
+                // PM CLOCK 
+                event = { name: name, y: end1 / 12 * 100, start: start, end: end };
+                blank = { name: '', y: 100 - pmPart / 12 * 100, color: 'white' };
+
+                eventsPM.push(event);
+                eventsPM.push(blank);
+
+                Highcharts.chart('container4', {
+                    chart: {
+                        height: 200,
+                        width: 200,
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: ' + eventTimes[0][1] + " - " + eventTimes[0][2]
+                    },
+                    plotOptions: {
+                        pie: {
+                            size: 180,
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: false,
+                            backgroundColor: 'transparent'
+                        }
+                    },
+                    series: [{
+                        name: 'Event',
+                        colorByPoint: true,
+                        data: eventsPM
+                    }],
+                    credits: {
+                        enabled: false
+                    }
+                });
+                eventTimes = [];
+                prev = end1;
+            } else if (!am && am1) {
+                var amPart = start1;
+                var pmPart = 12 - start1;
+                var time = [name, start + "pm", end + "am"];
+                eventTimes.push()
+                console.log("DEBUGGG: " + eventTimes);
+                prev = end;
+
+                // PM CLOCK
+                var blank = { name: '', y: (start1 - prev) / 12 * 100, color: 'white' };
+                var event = { name: name, y: pmPart / 12 * 100, start: start, end: end };
+
+                eventsPM.push(blank);
+                eventsPM.push(event);
+
+                Highcharts.chart('container4', {
+                    chart: {
+                        height: 200,
+                        width: 200,
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: ' + eventTimes[0][1] + " - " + eventTimes[0][2]
+                    },
+                    plotOptions: {
+                        pie: {
+                            size: 180,
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: false,
+                            backgroundColor: 'transparent'
+                        }
+                    },
+                    series: [{
+                        name: 'Event',
+                        colorByPoint: true,
+                        data: eventsPM
+                    }],
+                    credits: {
+                        enabled: false
+                    }
+                });
+
+                // AM CLOCK 
+                event = { name: name, y: end1 / 12 * 100, start: start, end: end };
+                blank = { name: '', y: 100 - end1 / 12 * 100, color: 'white' };
+
+                eventsAM.push(event);
+                eventsAM.push(blank);
+
+                Highcharts.chart('container2', {
+                    chart: {
+                        height: 200,
+                        width: 200,
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: ' + eventTimes[0][1] + " - " + eventTimes[0][2]
+                    },
+                    plotOptions: {
+                        pie: {
+                            size: 180,
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: false,
+                            backgroundColor: 'transparent'
+                        }
+                    },
+                    series: [{
+                        name: 'Event',
+                        colorByPoint: true,
+                        data: eventsAM
+                    }],
+                    credits: {
+                        enabled: false
+                    }
+                });
+                eventTimes = [];
+                prev = end1;
             }
-        });
+        } else if (am && am1) {
+            var temp = start.split(":");
+            start1 = parseInt(temp[0]) + (parseInt(temp[1]) / 60);
+            temp = end.split(":");
+            end1 = parseInt(temp[0]) + (parseInt(temp[1]) / 60);
+            console.log("DEBUG: " + start1 + " " + end1);
+            var blank = { name: '', y: (start1 - prev) / 12 * 100, color: 'white' };
+            var event = { name: name, y: (end1 - start1) / 12 * 100, start: start, end: end };
+            var time = [name, start + "am", end + "am"];
+            eventTimes.push(time);
+            eventsAM.push(blank);
+            eventsAM.push(event);
+            blank = { name: name, y: 100 - ((end1 - start1) / 12 * 100) - (start1 / 12 * 100), color: 'white' };
+            eventsAM.push(blank);
+
+            Highcharts.chart('container2', {
+                chart: {
+                    height: 200,
+                    width: 200,
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: ' + eventTimes[0][1] + " - " + eventTimes[0][2]
+                },
+                plotOptions: {
+                    pie: {
+                        size: 180,
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: false,
+                        backgroundColor: 'transparent'
+                    }
+                },
+                series: [{
+                    name: 'Event',
+                    colorByPoint: true,
+                    data: eventsAM
+                }],
+                credits: {
+                    enabled: false
+                }
+            });
+
+            eventsAM = [];
+            prev = end1;
+        } else {
+            var temp = start.split(":");
+            start1 = parseInt(temp[0]) + (parseInt(temp[1]) / 60);
+            temp = end.split(":");
+            end1 = parseInt(temp[0]) + (parseInt(temp[1]) / 60);
+
+            var blank = { name: '', y: (start1 - prev) / 12 * 100, color: 'white' };
+            var event = { name: name, y: (end1 - start1) / 12 * 100, start: start, end: end };
+            var time = [name, start + "pm", end + "pm"];
+
+            eventTimes.push(time);
+            eventsPM.push(blank);
+            eventsPM.push(event);
+            blank = { name: name, y: 100 - ((end1 - start1) / 12 * 100) - (start1 / 12 * 100), color: 'white' };
+            eventsPM.push(blank);
+            Highcharts.chart('container4', {
+                chart: {
+                    height: 200,
+                    width: 200,
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: ' + eventTimes[0][1] + " - " + eventTimes[0][2]
+                },
+                plotOptions: {
+                    pie: {
+                        size: 180,
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: false,
+                        backgroundColor: 'transparent'
+                    }
+                },
+                series: [{
+                    name: 'Event',
+                    colorByPoint: true,
+                    data: eventsPM
+                }],
+                credits: {
+                    enabled: false
+                }
+            });
+
+            eventsPM = [];
+            prev = end1;
+        }
     };
 }
 
