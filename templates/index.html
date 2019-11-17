@@ -21,21 +21,66 @@
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="../static/c.js"></script>
 
-    <div class="container">
+    <div class="container mt-5">
         <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col">
-                <div id="container"></div>
-                <div id="container2"></div>
+            <div class="col-md-6 pr-0">
+                <div class="row">
+                    <div class="col text-center">
+                        <h3>AM</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div id="container"></div>
+                        <div id="container2"></div>
+                    </div>
+                </div>
+
             </div>
-            <div class="col-md-2"></div>
+            <div class="col-md-6 pl-0">
+                <div class="row">
+                    <div class="col text-center">
+                        <h3>PM</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div id="container3"></div>
+                        <div id="container4"></div>
+                    </div>
+                </div>
+
+            </div>
         </div>
         <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col text-center">
-                <div id="addEv" class="btn btn-primary">Add event</div>
+            <div class="col-md-1"></div>
+            <div class="col">
+                <form class="form-inline">
+                    <div class="form-group mr-4">
+                        <input type="text" class="form-control" id="name" placeholder="Event name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="start" style="width: 4.3em;" placeholder="start">
+                    </div>
+                    <div class="form-group mr-2">
+                        <select class="form-control" id="am">
+                            <option>AM</option>
+                            <option>PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="end" style="width: 4.3em;" placeholder="end">
+                    </div>
+                    <div class="form-group mr-4">
+                        <select class="form-control" id="am1">
+                            <option>AM</option>
+                            <option>PM</option>
+                        </select>
+                    </div>
+                    <div id="addEv" class="btn btn-primary">Add Event</div>
+                </form>
             </div>
-            <div class="col-md-2"></div>
+            <div class="col-md-1"></div>
         </div>
     </div>
     <!-- <div id="container2"></div> -->
