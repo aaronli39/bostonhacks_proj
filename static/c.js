@@ -290,7 +290,7 @@ var eventTimes = [];
 
 var addEvent = function (name, start, end, am, am1, first) {
     var container = "";
-    if (first) {
+    if (first) {    
         var temp = start.split(":");
         start1 = parseInt(temp[0]) + (parseInt(temp[1]) / 60);
         temp = end.split(":");
